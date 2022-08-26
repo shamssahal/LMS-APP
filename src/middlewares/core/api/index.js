@@ -1,5 +1,6 @@
 import axios from 'axios'
 import {apiSuccess,apiError,API_REQUEST} from '../../../actions/api'
+import { BOOKS } from '../../../actions/books';
 import { forceLogout, LOGIN, LOGOUT,setAuthentication} from '../../../actions/login';
 
 
@@ -11,6 +12,7 @@ export const apiMiddleware = ({dispatch}) => next => async(action) =>{
             switch(action.meta.feature){
                 case LOGIN:
                 case LOGOUT:
+                case BOOKS:
 
                     if(action.meta.method==='get'){
                         resp = await axios.get(action.meta.url,{withCredentials:true,credentials:'include',

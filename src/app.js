@@ -57,6 +57,11 @@ const App = () => {
                         component={CreateNewBook}
                     />
                     <ProtectedRoute
+                        path="/book/:bookId"
+                        exact
+                        component={BookDetails}
+                    />
+                    <ProtectedRoute
                         path="/books"
                         exact
                         component={ListBooks}
@@ -70,6 +75,11 @@ const App = () => {
                         path="/createNewUser/:userId"
                         exact
                         component={CreateNewUser}
+                    />
+                    <ProtectedRoute
+                        path="/user/:userId"
+                        exact
+                        component={UserDetails}
                     />
                     <ProtectedRoute
                         path="/users"
