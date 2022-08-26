@@ -1,0 +1,14 @@
+.nav-item-text:hover {
+    cursor: pointer;
+}
+
+.page-container {
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+    margin-left: 2em;
+    margin-right: 2em;
+}
+
+.page-title-text {
+    font-size: 22px !important;
+}
