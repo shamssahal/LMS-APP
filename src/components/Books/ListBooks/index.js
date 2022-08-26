@@ -101,7 +101,6 @@ const ListBooks = () => {
         dispatch(getAllBooks())
     },[dispatch])
     const books = useSelector((state)=>booksSelector(state))
-    console.log(books)
     return (
         <Navbar>
             <div className="d-flex justify-content-between mb-2 mx-3">

@@ -30,7 +30,6 @@ const CreateNewBook = (props) => {
     },[bookId,dispatch])
     
     const book = useSelector(state=>bookSelector(state))
-    console.log(book)
     useEffect(()=>{
         if(book){
             setTitle(book.title)

@@ -97,7 +97,6 @@ const ListUsers = () => {
         dispatch(getAllUsers())
     },[dispatch])
     const users = useSelector((state)=>usersSelector(state))
-    console.log(users)
     return (
         <Navbar>
             <div className="d-flex justify-content-between mb-2 mx-3">
