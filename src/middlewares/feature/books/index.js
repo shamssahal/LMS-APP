@@ -2,7 +2,7 @@ import { apiRequest,API_SUCCESS,API_ERROR } from "../../../actions/api"
 import {ROOT_URL} from '../../../config/'
 
 import Alert from "sweetalert2";
-import { BOOK, BOOKS, getAllBooks, GET_BOOK, GET_BOOKS, setAllBooks } from "../../../actions/books";
+import { BOOK, BOOKS, BOOK_CREATE, getAllBooks, GET_BOOK, GET_BOOKS, setAllBooks } from "../../../actions/books";
 
 export const booksMiddleware = ({dispatch}) => next => (action) =>{
     next(action)
@@ -25,7 +25,15 @@ export const booksMiddleware = ({dispatch}) => next => (action) =>{
                 feature:BOOK
             }))
             break;
-
+        case BOOK_CREATE:
+            dispatch(apiRequest({
+                body:action.payload,
+                config:{},
+                url:`${ROOT_URL}/book`,
+                method:'post',
+                feature:BOOK
+            }))
+            break;
         case `${BOOKS} ${API_SUCCESS}`:
                 dispatch(setAllBooks(action.payload))
                 break;

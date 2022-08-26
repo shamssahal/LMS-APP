@@ -2,7 +2,7 @@ import { apiRequest,API_SUCCESS,API_ERROR } from "../../../actions/api"
 import {ROOT_URL} from '../../../config/'
 
 import Alert from "sweetalert2";
-import { GET_USER, GET_USERS, setAllUsers, USER, USERS } from "../../../actions/users";
+import { getAllUsers, GET_USER, GET_USERS, setAllUsers, USER, USERS, USER_CREATE } from "../../../actions/users";
 import { getAllBooks, setAllBooks } from "../../../actions/books";
 
 export const usersMiddleware = ({dispatch}) => next => (action) =>{
@@ -26,14 +26,24 @@ export const usersMiddleware = ({dispatch}) => next => (action) =>{
                 feature:USER
             }))
             break;
-
+        case USER_CREATE:
+            dispatch(apiRequest({
+                body:action.payload,
+                config:{},
+                url:`${ROOT_URL}/signup`,
+                method:'post',
+                feature:USER
+            }))
+            break;
+            
         case `${USERS} ${API_SUCCESS}`:
                 dispatch(setAllUsers(action.payload))
                 break;
 
         case `${USER} ${API_SUCCESS}`:
-                dispatch(getAllBooks())
-                break;   
+                dispatch(getAllUsers())
+                break;
+
         case `${USERS} ${API_ERROR}`:
             Alert.fire({
                 position: 'top-end',

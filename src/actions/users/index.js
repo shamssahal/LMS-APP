@@ -5,8 +5,11 @@ export const USERS = `USERS`;
 //action types
 export const GET_USERS = `${USERS}_GET`;
 export const SET_USERS = `${USERS}_SET`;
+
 export const GET_USER = `${USER}_GET`;
 export const SET_USER = `${USER}_SET`;
+
+export const USER_CREATE = `${USER}_CREATE`;
 
 //action creators
 export const getAllUsers = () =>({
@@ -26,5 +29,10 @@ export const getUser = (data) =>({
 
 export const setUser = (data) =>({
     type:SET_USER,
+    payload:data
+})
+
+export const createUser = (data) =>({
+    type:USER_CREATE,
     payload:data
 })

@@ -12,7 +12,6 @@ import {
 import { authSelector } from "./selectors/auth";
 import { loginCheck } from "./actions/login";
 
-import Home from "./components/Home";
 import Login from "./components/Login";
 import PendingLoader from "./components/utils/PendingLoader";
 import CreateNewBook from "./components/Books/CreateBook";

@@ -1,8 +1,8 @@
 import axios from 'axios'
 import {apiSuccess,apiError,API_REQUEST} from '../../../actions/api'
-import { BOOKS } from '../../../actions/books';
+import { BOOK, BOOKS } from '../../../actions/books';
 import { forceLogout, LOGIN, LOGOUT,setAuthentication} from '../../../actions/login';
-import { USERS } from '../../../actions/users';
+import { USER, USERS } from '../../../actions/users';
 
 
 export const apiMiddleware = ({dispatch}) => next => async(action) =>{
@@ -15,6 +15,8 @@ export const apiMiddleware = ({dispatch}) => next => async(action) =>{
                 case LOGOUT:
                 case BOOKS:
                 case USERS:
+                case BOOK:
+                case USER:
 
                     if(action.meta.method==='get'){
                         resp = await axios.get(action.meta.url,{withCredentials:true,credentials:'include',

@@ -6,5 +6,3 @@ if (process.env.REACT_APP_ENV === "production") {
 } else {
     ROOT_URL = "http://localhost:3000";
 }
-
-export const RAZORPAY_KEY_ID=`rzp_test_43Mz9yF0rRtBei`;

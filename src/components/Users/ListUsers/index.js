@@ -68,11 +68,11 @@ const Table = ({users}) => {
                                 <Grid
                                     data={data}
                                     columns={[
-                                        {name:"Identification",width:"10%"},
-                                        {name:"Name",width:"30%"},
+                                        {name:"Identification",width:"15%"},
+                                        {name:"Name",width:"20%"},
                                         {name:"Books Allocated",width:"20%"},
                                         {name:"Credit Available",width:"20%"},
-                                        {name:"Action",width:"15%"},
+                                        {name:"Actions",width:"15%"},
                                     ]}
                                     search={true}
                                     pagination={{
