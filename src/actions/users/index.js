@@ -10,6 +10,7 @@ export const GET_USER = `${USER}_GET`;
 export const SET_USER = `${USER}_SET`;
 
 export const USER_CREATE = `${USER}_CREATE`;
+export const USER_UPDATE = `${USER}_UPDATE`;
 
 //action creators
 export const getAllUsers = () =>({
@@ -34,5 +35,10 @@ export const setUser = (data) =>({
 
 export const createUser = (data) =>({
     type:USER_CREATE,
+    payload:data
+})
+
+export const updateUser = (data) =>({
+    type:USER_UPDATE,
     payload:data
 })

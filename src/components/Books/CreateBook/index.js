@@ -1,15 +1,18 @@
-import React,{useState}from 'react'
-import { useDispatch } from 'react-redux'
+import React,{useEffect, useState}from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { createBook } from '../../../actions/books'
+import { createBook, getBook, updateBook } from '../../../actions/books'
+import { bookSelector } from '../../../selectors/books'
 import Navbar from '../../Navbar'
 
-const CreateNewBook = () => {
-    
+const CreateNewBook = (props) => {
+
     let src = 'https://www.pngkey.com/png/full/103-1032588_book-cover-icon-website.png'
-  
+
+    const bookId = props.match.params.bookId
     const dispatch = useDispatch()
     const history = useHistory()
+
     const [title,setTitle] = useState()
     const [validateTitle,setValidateTitle] = useState(true)
 
@@ -17,17 +20,46 @@ const CreateNewBook = () => {
     const [validateAuthor,setValidateAuthor] = useState(true)
 
     const [cover,setCover] = useState('')
+    const [uploadUrl,setUploadUrl] = useState('')
+    const [showUpload,setShowUpload] = useState(false)
     
+    useEffect(()=>{
+        if(bookId){
+            dispatch(getBook({bookId}))
+        }
+    },[bookId,dispatch])
+    
+    const book = useSelector(state=>bookSelector(state))
+    console.log(book)
+    useEffect(()=>{
+        if(book){
+            setTitle(book.title)
+            setAuthor(book.author)
+            setUploadUrl(book.cover_loc);
+        }
+    } ,[book])
+ 
     const onFileChange = (event) => {
+        setShowUpload(true)
         setCover(event.target.files[0])
-        // dispatch(getTaskThumbnailPresignedUrl(event.target.files[0].type))
     }
+
+    const uploadFile = async () => {
+        setUploadUrl(src)
+    }
+
+
     const handleSubmit = () => {
-        dispatch(createBook({
-            title,
-            author,
-            coverLoc:cover||src
-        }))
+        if(bookId){
+            dispatch(updateBook({bookId,title,author,coverLoc:uploadUrl}))
+        }else{
+            dispatch(createBook({
+                title,
+                author,
+                coverLoc:uploadUrl
+            }))
+        }
+
         history.push('/books')
     }
     return (
@@ -113,9 +145,9 @@ const CreateNewBook = () => {
                                     {/* Book Cover  */}
                                     <div className="row mb-3">
                                         <div>
-                                            <h4>Upload Book Cover</h4>
+                                            <h4>Upload Book Cover </h4>
                                             <img 
-                                                src={cover? URL.createObjectURL(cover) : src} 
+                                                src={uploadUrl && !cover ? uploadUrl : cover ? URL.createObjectURL(cover) : src}
                                                 alt="profile"
                                                 style={{height:'50px',width:'50px'}}    
                                                 />
@@ -124,7 +156,7 @@ const CreateNewBook = () => {
                                             
                                                 {cover===''?
                                                 <>
-                                                    <h5>Choose a book cover</h5>
+                                                    <h5>Choose a task thumbnail</h5>
                                                     <input 
                                                         type="file" 
                                                         accept="image/*"
@@ -133,22 +165,23 @@ const CreateNewBook = () => {
                                                         />
                                                 </>
                                                 
-                                                :   <div>
-                                                        <button 
-                                                            className="btn btn-info btn-rounded mt-3"
-                                                            // onClick={uploadFile}
-                                                            style={{padding:'2px' ,width:'100px'}}
-                                                        >   
-                                                            Upload
-                                                        </button>
-                                                        <span 
-                                                            className='p-1' 
-                                                            style={{marginLeft:'10px'}}
-                                                            onClick={()=>{setCover('')}}
-                                                        >
-                                                                    ❌
-                                                        </span>
-                                                    </div>
+                                                :<>
+                                                    <button 
+                                                        className="btn btn-info btn-rounded mt-3"
+                                                        onClick={uploadFile}
+                                                        style={{padding:'2px' ,width:'100px'}}
+                                                    >   
+                                                        Upload
+                                                    </button>
+                                                    <span 
+                                                        className='p-1' 
+                                                        
+                                                        onClick={()=>{setCover('');setShowUpload(false)}}
+                                                    >
+                                                        ❌
+                                                    </span>
+                                                </>
+                                                
                                                 }
                                             </div>
                                         </div>         
@@ -165,7 +198,7 @@ const CreateNewBook = () => {
                                 className="btn btn-success"
                                 onClick={handleSubmit}
                             >                   
-                                Create New Book
+                                {bookId?'Edit Book Details':'Create New Book'}
                             </button>
                         </div>
                     </div>
