@@ -1,57 +1,106 @@
 import React,{useEffect, useState}from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import axios from 'axios'
+import Alert from "sweetalert2";
+import { shallowEqual, useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { createBook, getBook, updateBook } from '../../../actions/books'
+import { createBook, getBook, getBookCoverPresignedUrl, setBook, updateBook } from '../../../actions/books'
 import { bookSelector } from '../../../selectors/books'
 import Navbar from '../../Navbar'
+import { bookCoverPresignedUrlSelector } from '../../../selectors/preSignedUrls';
+import { AWS_S3_USER } from '../../../config';
 
 const CreateNewBook = (props) => {
-
+    // Default source for book cover -> bad practice but for now it works
     let src = 'https://www.pngkey.com/png/full/103-1032588_book-cover-icon-website.png'
 
-    const bookId = props.match.params.bookId
+    // Getting bookId from props if it is edit mode
+    const {bookId} = props.match.params
+
     const dispatch = useDispatch()
     const history = useHistory()
 
+    // title and validation states for input field
     const [title,setTitle] = useState('')
     const [validateTitle,setValidateTitle] = useState(true)
 
+    // author and validation states for input field
     const [author,setAuthor] = useState('')
     const [validateAuthor,setValidateAuthor] = useState(true)
 
+    // cover and upload component states for upload cover image component
     const [cover,setCover] = useState('')
     const [uploadUrl,setUploadUrl] = useState('')
-    const [showUpload,setShowUpload] = useState(false)
+    const [,setShowUpload] = useState(false)
 
-    
+    // Getting book from store in case it is edit mode
+    const book = useSelector(state=>bookSelector(state),shallowEqual)
+
+    // setting book details if received data in edit mode
     useEffect(()=>{
-        if(bookId){
-            dispatch(getBook({bookId}))
-        }
-    },[bookId,dispatch])
-    
-    const book = useSelector(state=>bookSelector(state))
-    useEffect(()=>{
-        if(book){
+        if(book && bookId){
             setTitle(book.title)
             setAuthor(book.author)
             setUploadUrl(book.cover_loc);
         }
-    } ,[book.length])
+    } ,[book,bookId])
+
+    // In case of create mode, clearing previous state else getting data for edit mode
+    useEffect(()=>{
+        if(bookId === undefined){
+            dispatch(setBook({}))
+        }else{
+            dispatch(getBook({bookId}))
+        }
+    },[bookId,dispatch])
  
+    // Event handler for cover image input
     const onFileChange = (event) => {
         setShowUpload(true)
         setCover(event.target.files[0])
+        // getting presigned url from aws s3 for image upload
+        dispatch(getBookCoverPresignedUrl(event.target.files[0].type))
     }
 
+    //Getting upload config from store to upload image to s3
+    const uploadConfigs = useSelector(state=>bookCoverPresignedUrlSelector(state))
+
+    // Helper method to upload image to s3 and set user image url in state
     const uploadFile = async () => {
-        setUploadUrl(src)
+        // put call to upload image to s3
+        await axios.put(uploadConfigs.url,cover,{
+            headers:{
+               'Content-Type':cover.type
+            }
+        }).then((val)=>{
+           setUploadUrl(`${AWS_S3_USER}/${uploadConfigs.key}`)
+           Alert.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: 'Thumbnail Uploaded',
+            showConfirmButton: false,
+            timer: 1500
+          })
+           
+        }).catch((err)=>{
+           Alert.fire({
+               position: 'top-end',
+               icon: 'error',
+               title: 'Image Upload Failed',
+               showConfirmButton: false,
+               timer: 1500
+             })
+        })
     }
 
-
+    // Event handler for create/edit book button
     const handleSubmit = () => {
         if(bookId){
-            dispatch(updateBook({bookId,title,author,coverLoc:uploadUrl}))
+            dispatch(updateBook({
+                bookId,
+                title,
+                author,
+                coverLoc:uploadUrl
+            }))
         }else{
             dispatch(createBook({
                 title,
@@ -60,9 +109,9 @@ const CreateNewBook = (props) => {
             }))
 
         }
-
         history.push('/books')
     }
+    
     return (
         <Navbar title="Create New Book">
             <div className="row justify-content-center">

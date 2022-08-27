@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React,{useState,useEffect} from 'react'
+import React,{useEffect} from 'react'
 import { Grid, _ } from "gridjs-react";
 import { useDispatch, useSelector } from 'react-redux'
 import { allocateBook, deallocateBook, getBook } from '../../../actions/books'
@@ -13,23 +13,22 @@ import { getAllUsers } from '../../../actions/users';
 import { usersSelector } from '../../../selectors/users';
 
 
-
+// Allocate User Component for allocation of book to users
 const AllocateUser = ({bookId}) => {
-      
     const dispatch = useDispatch()
+
+    // Dispatch to get all users
     useEffect(()=>{
         dispatch(getAllUsers())
     },[dispatch])
+
+    // Get all users from store
     const users = useSelector(state=>usersSelector(state))
+    // filter users who don't have credit available
     const filteredUsers = users?users.filter(user=>user.available_credit>0):[]
-    const options = filteredUsers?filteredUsers.map(({userName,userId})=>{
-        return(
-            {
-                value:userId,
-                label:userName
-            }
-        )
-    }):[]
+    //constructing options for select component
+    const options = filteredUsers?filteredUsers.map(({userName,userId})=>({value:userId,label:userName})):[]
+    // Action listener to dispatch action to allocate book to user
     const handleAllocation = ({value})=> {
         dispatch(allocateBook({bookId,userId:value})) 
     }
@@ -62,8 +61,10 @@ const AllocateUser = ({bookId}) => {
     )
 }
 
+// Allocation Table Component for displaying allocation history of book
 const AllocationTable = ({data})=> {
     const history = useHistory()
+    // Constructing columns for allocation table
     const tableData = data?data.map((alloc)=>[
         _(
             <a 
@@ -74,10 +75,12 @@ const AllocationTable = ({data})=> {
                     {alloc.userId}
             </a>
         ),
+        // if account is not active (account deleted) , then show [ Deleted User ]
         alloc.account_status==='active'?alloc.userName:'[ Deleted User ]',
         moment(alloc.allocatedOn).format('Do MMMM, YYYY hh:mm A'),
         alloc.returnedOn?moment(alloc.returnedOn).format('Do MMMM, YYYY hh:mm A'):_(<span className={`badge bg-primary`}>Currently Holding</span>),
     ]):[]
+
     return (
         <div className="col-12">
             <div className="card">
@@ -110,28 +113,33 @@ const AllocationTable = ({data})=> {
     )
 }
 
-
+// Book Details Component for displaying book details
 const BookDetails = (props) => {
-    
+    // fetching bookId to get book details
     const bookId = props.match.params.bookId
     const dispatch = useDispatch()
 
+    // Dispatch to get book details
     useEffect(()=>{
         if(bookId){
             dispatch(getBook({bookId}))
         }
     },[bookId,dispatch])
 
+    // Get book details from store
     const book = useSelector(state=>bookSelector(state))
     useEffect(()=>{  
     },[book])
 
-
+    // Action listener to dispatch action to deallocate book from user -> passed to Banner component
     const onActionClick = () => {
         if(book){
             if(book.status === 'Allocated'){
+                // fetching userId for current holder of book -> returnedOn is null
                 const user = book.allocationHistory.filter((item)=>item.returnedOn===null)
                 const userId = user[0].userId
+
+                // Dispatch to deallocate book from user
                 dispatch(deallocateBook({bookId,userId}))
         }
     }
@@ -140,6 +148,7 @@ const BookDetails = (props) => {
 
     return (
         <Navbar title="Book Details">
+            {/* Banner Component for Book Details */}
             <Banner
                 primaryData={book?book.title:''}
                 secondaryData={book?book.author:''}
@@ -147,13 +156,16 @@ const BookDetails = (props) => {
                 actionText={book?book.status==='Unallocated'?'Allocate':'Unallocate':'No Book Found'}
                 onActionClick={onActionClick}
                 showActionButton={book?book.status==='Unallocated'?false:true:false}
-    />  
+        />  
+            {/* If book is unallocated show component to allocate book to user */}
             {book?book.status==='Unallocated'?
                 <AllocateUser
                     bookId={bookId}
                 />
                 :null:
             null}
+            
+            {/* Allocation table to show allocation history of book */}
             <AllocationTable data={book?book.allocationHistory:[]}/>
         </Navbar>
     )

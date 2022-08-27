@@ -2,21 +2,25 @@ import React,{useEffect} from 'react'
 import { Grid, _ } from "gridjs-react";
 import { useDispatch,useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { deleteBook, getAllBooks } from '../../../actions/books'
+import { deleteBook, getAllBooks, } from '../../../actions/books'
 import { booksSelector } from '../../../selectors/books'
 import Navbar from '../../Navbar'
 
 const Table = ({books}) => {
     const history = useHistory();
     const dispath = useDispatch();
+
+    // Event handler to delete book
     const handleDelete = (bookId) => {
         dispath(deleteBook({bookId}))
     }
+
+    // Constructing table data for listing table
     const data = books?books.map((book)=>[
         _(
             <>
                 <img
-                    src={'https://image-store-admin.s3.amazonaws.com/labTestThumbnail/752713cd-3d71-41ee-ab03-fdb59004f1a6.image/png'}
+                    src={book.cover_loc}
                     alt={book.title}
                     style={{height:'48px',width:'48px'}}
                 />
@@ -94,17 +98,24 @@ const Table = ({books}) => {
     )
 }
 
+// List Books Component for displaying list of books
 const ListBooks = () => {
     const dispatch = useDispatch()
     const history = useHistory()
+
+    // Dispatch to get list of books
     useEffect(()=>{
         dispatch(getAllBooks())
     },[dispatch])
+
+    // Fetching list of books from store
     const books = useSelector((state)=>booksSelector(state))
     return (
         <Navbar>
             <div className="d-flex justify-content-between mb-2 mx-3">
                 <h3> Books Listing</h3>
+
+                {/* Create New Book Component  */}
                 <button 
                     className='btn btn-info'
                     style={{height:'80%'}}
@@ -115,6 +126,7 @@ const ListBooks = () => {
                         CREATE NEW BOOK
                 </button>
             </div>
+            {/* Book Listing in a table format */}
             <Table
                 books={books}
             />

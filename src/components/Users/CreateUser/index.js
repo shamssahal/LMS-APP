@@ -1,14 +1,17 @@
 import React,{useState,useEffect} from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { shallowEqual, useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { createUser, getUser, updateUser } from '../../../actions/users'
+import axios from 'axios'
+import Alert from "sweetalert2";
+import { createUser, getUser, getUserIdPresignedUrl, updateUser } from '../../../actions/users'
+import { userIdPresignedUrlSelector } from '../../../selectors/preSignedUrls'
 import { userSelector } from '../../../selectors/users'
 import Navbar from '../../Navbar'
 
 const CreateNewUser = (props) => {
     let src = 'https://cdn4.iconfinder.com/data/icons/small-n-flat/24/user-512.png'
 
-    const userId = props.match.params.userId
+    const {userId} = props.match.params
     const dispatch = useDispatch()
     const history = useHistory()
 
@@ -22,32 +25,56 @@ const CreateNewUser = (props) => {
     const [id,setId] = useState('')
     const [uploadUrl,setUploadUrl] = useState('')
     const [showUpload,setShowUpload] = useState(false)
+
+    const user = useSelector(state=>userSelector(state),shallowEqual)
     
+    useEffect(()=>{
+        if(user&&userId){
+            setName(user.userName)
+            setEmail(user.email)
+            setUploadUrl(user.id_loc)
+        }},[user,userId])
+
+
     useEffect(()=>{
         if(userId){
             dispatch(getUser({userId}))
         }
     },[userId,dispatch])
 
-    const user = useSelector(state=>userSelector(state))
-    
-    useEffect(()=>{
-        if(user){
-            setName(user.userName)
-            setEmail(user.email)
-            setUploadUrl(user.id_loc)
-        }},[user.length])
-
-
-
     const onFileChange = (event) => {
         setShowUpload(true)
         setId(event.target.files[0])
-        // dispatch(getTaskThumbnailPresignedUrl(event.target.files[0].type))
+        dispatch(getUserIdPresignedUrl(event.target.files[0].type))
     }
 
+    const uploadConfigs = useSelector(state=>userIdPresignedUrlSelector(state))
+
+
     const uploadFile = async () => {
-        setUploadUrl(src)
+        await axios.put(uploadConfigs.url,id,{
+            headers:{
+               'Content-Type':id.type
+            }
+        }).then((val)=>{
+           setUploadUrl(`https://d1caq8coktrxsi.cloudfront.net/${uploadConfigs.key}`)
+           Alert.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: 'Thumbnail Uploaded',
+            showConfirmButton: false,
+            timer: 1500
+          })
+           
+        }).catch((err)=>{
+           Alert.fire({
+               position: 'top-end',
+               icon: 'error',
+               title: 'Image Upload Failed',
+               showConfirmButton: false,
+               timer: 1500
+             })
+        })
     }
 
     const handleSubmit = () => {

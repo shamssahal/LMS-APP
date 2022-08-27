@@ -27,11 +27,11 @@ const Login = () => {
     return (
         <div className="authentication-bg pb-0">
             <div className="auth-fluid">
-                <div className="auth-fluid-form-box">
-                    <div className="align-items-center d-flex h-100">
-                        <div className="card-body">
-                            <h3 className="mt-0">Sign In</h3>
-                            <p className="text-muted mb-4">
+                <div className="auth-fluid-form-box" style={{backgroundColor:'#404040'}}>
+                    <div className="align-items-center d-flex h-100" >
+                        <div className="card-body" >
+                            <h3 className="mt-0 text-white">Sign In</h3>
+                            <p className="mb-4 text-white">
                                 Enter your email address and password to access{" "}
                                 <br />
                                 LMS dashboard
@@ -50,7 +50,7 @@ const Login = () => {
                                 <div className="mb-3">
                                     <label
                                         htmlFor="emailaddress"
-                                        className="form-label"
+                                        className="form-label text-white"
                                     >
                                         Email address
                                     </label>
@@ -70,7 +70,7 @@ const Login = () => {
                                 <div className="mb-3">
                                     <label
                                         htmlFor="password"
-                                        className="form-label"
+                                        className="form-label text-white"
                                     >
                                         Password
                                     </label>
@@ -89,9 +89,9 @@ const Login = () => {
                                 </div>
                                 <div className="d-grid mb-0 text-center">
                                     <button
-                                        className="btn"
+                                        className="btn btn-success"
                                         type="submit"
-                                        style={{ backgroundColor: "#373750" }}
+                                        // style={{ backgroundColor: "#FFF" }}
                                     >
                                         <span style={{ color: "#FFF" }}>
                                             Log In
@@ -100,7 +100,7 @@ const Login = () => {
                                 </div>
                             </form>
                             <footer className="footer footer-alt">
-                                <p className="text-muted">
+                                <p className="text-white">
                                     Don't have an account?{" "}
                                     <b>Please contact admin.</b>
                                 </p>

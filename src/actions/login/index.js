@@ -1,3 +1,4 @@
+//features
 export const LOGIN = `[LOGIN]`
 export const LOGOUT = `[LOGOUT]`
 export const AUTH = `[AUTH]`
@@ -9,7 +10,8 @@ export const LOGOUT_FORCE = `${LOGOUT} FORCED`
 export const AUTH_SET = `${AUTH} SET`
 export const LOGIN_CHECK = `${LOGIN} CHECK`
 
-//action creator
+//action creators
+
 export const getLoggedIn = (data) =>({
     type: LOGIN_AUTH,
     payload:data

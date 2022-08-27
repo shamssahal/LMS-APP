@@ -1,13 +1,23 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React,{useEffect} from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { getLoggedOut, setAuthentication } from "../../actions/login";
 
 import { useHistory } from "react-router";
 
+// Navbar parent component
 const Navbar = (props) => {
+
     const dispatch = useDispatch();
+    const history = useHistory();
+
+    const openInNewTab = (url) => {
+        const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
+        if (newWindow) newWindow.opener = null
+      }
+
+    // loading js script for bootstrap navbar
     useEffect(() => {
         const script = document.createElement("script");
         script.src = "/assets/js/advancedForm.js";
@@ -18,12 +28,13 @@ const Navbar = (props) => {
         };
     }, [dispatch]);
 
+    // Event handler for logout
     const handleLogout = () => {
         dispatch(setAuthentication({isAuthenticated:"pending"}))
         dispatch(getLoggedOut());
         history.push("/login")
     };
-    const history = useHistory();
+
     return (
         <div>
             <div className="leftside-menu">
@@ -34,16 +45,16 @@ const Navbar = (props) => {
                 >
                     <span className="logo-lg">
                         <img
-                            src="/assets/images/uvi-logo-clear.png"
+                            src="/assets/images/library.png"
                             alt=""
-                            height="50"
+                            height="120"
                         />
                     </span>
                     <span className="logo-sm">
                         <img
-                            src="/assets/images/uvi-logo-clear.png"
+                            src="/assets/images/library.png"
                             alt=""
-                            height="56"
+                            height="60"
                         />
                     </span>
                 </a>
@@ -69,8 +80,7 @@ const Navbar = (props) => {
                                 className={
                                     history.location.pathname==='/' || 
                                     history.location.pathname==='/books' || 
-                                    history.location.pathname==='/createNewBook' ||
-                                    history.location.pathname==='/createNewBook/:bookId' ?`side-nav-link text-white`:`side-nav-link`}
+                                    history.location.pathname==='/createNewBook'?`side-nav-link text-white`:`side-nav-link`}
                                 onClick={()=>{
                                     history.push('/books')
                                 }}
@@ -86,8 +96,7 @@ const Navbar = (props) => {
                                 aria-controls="sidebarDashboards"
                                 className={
                                     history.location.pathname==='/users' || 
-                                    history.location.pathname==='/createNewUser' ||
-                                    history.location.pathname==='/createNewUser/:userId' ?`side-nav-link text-white`:`side-nav-link`}
+                                    history.location.pathname==='/createNewUser' ?`side-nav-link text-white`:`side-nav-link`}
                                 onClick={()=>{
                                     history.push('/users')
                                 }}
@@ -96,6 +105,44 @@ const Navbar = (props) => {
                                 <span>Users</span>
                             </a>
                         </li>
+                        <li className="side-nav-title side-nav-item">
+                            Resources
+                        </li>
+                        <li className="side-nav-item nav-item-text">
+                            <a
+                                data-bs-toggle="collapse"
+                                className="side-nav-link"
+                                onClick={() => openInNewTab('https://drive.google.com/file/d/1YqQBxXBC4I72qf1yBo67CZiaDbWEGUeC/view?usp=sharing')}
+                            >
+                                <i className="uil-lightbulb-alt"></i>
+                                <span>Ideation Process</span>
+                            </a>
+                        </li>
+                        <li className="side-nav-item nav-item-text">
+                            <a
+                                data-bs-toggle="collapse"
+                                aria-expanded="false"
+                                aria-controls="sidebarDashboards"
+                                className="side-nav-link"
+                                onClick={() => openInNewTab('https://drive.google.com/file/d/1Os5oGYL6swTBtyj99clpddpy9uP1p1yM/view?usp=sharing')}
+                            >
+                                <i className="uil-server-network-alt"></i>
+                                <span>HLD</span>
+                            </a>
+                        </li>
+                        <li className="side-nav-item nav-item-text">
+                            <a
+                                data-bs-toggle="collapse"
+                                aria-expanded="false"
+                                aria-controls="sidebarDashboards"
+                                className="side-nav-link"
+                                onClick={() => openInNewTab('https://drive.google.com/file/d/1r5Qu3ycwwLZ3yLt2lroj0F7BSbYeSMc4/view?usp=sharing')}
+                            >
+                                <i className="uil-file-landscape-alt"></i>
+                                <span>Problem Statement</span>
+                            </a>
+                        </li>
+                        
                     </ul>
                     <div className="clearfix"></div>
                 </div>

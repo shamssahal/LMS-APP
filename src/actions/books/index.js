@@ -1,6 +1,7 @@
 //features
 export const BOOK = `BOOK`;
 export const BOOKS = `BOOKS`;
+export const BOOK_COVER_PRESIGNED_URL = `BOOK_COVER_PRESIGNED_URL`;
 
 //action types
 export const GET_BOOKS = `${BOOKS}_GET`;
@@ -15,6 +16,9 @@ export const BOOK_DELETE = `${BOOK}_DELETE`;
 
 export const BOOK_ALLOCATE = `${BOOK}_ALLOCATE`;
 export const BOOK_DEALLOCATE = `${BOOK}_DEALLOCATE`;
+
+export const BOOK_COVER_PRESIGNED_URL_GET = `${BOOK_COVER_PRESIGNED_URL}_GET`;
+export const BOOK_COVER_PRESIGNED_URL_SET = `${BOOK_COVER_PRESIGNED_URL}_SET`;
 
 
 //action creators
@@ -60,6 +64,16 @@ export const allocateBook = (data) =>({
 
 export const deallocateBook = (data) =>({
     type:BOOK_DEALLOCATE,
+    payload:data
+})
+
+export const getBookCoverPresignedUrl = (data) =>({
+    type:BOOK_COVER_PRESIGNED_URL_GET,
+    payload:data
+})
+
+export const setBookCoverPresignedUrl = (data) =>({
+    type:BOOK_COVER_PRESIGNED_URL_SET,
     payload:data
 })
 

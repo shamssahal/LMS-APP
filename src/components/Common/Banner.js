@@ -1,5 +1,6 @@
 import React from 'react'
 
+// Common Banner Component for all Book Details and User Details Pages
 const Banner = ({
     primaryData,
     secondaryData,

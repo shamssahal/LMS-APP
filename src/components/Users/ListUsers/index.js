@@ -18,7 +18,7 @@ const Table = ({users}) => {
         _(
             <>
                 <img
-                    src={'https://image-store-admin.s3.amazonaws.com/labTestThumbnail/752713cd-3d71-41ee-ab03-fdb59004f1a6.image/png'}
+                    src={user.id_loc}
                     alt={users.userName}
                     style={{height:'48px',width:'48px'}}
                 />
