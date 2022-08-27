@@ -3,14 +3,17 @@ import Navbar from '../../Navbar'
 import { Grid, _ } from "gridjs-react";
 import { useDispatch,useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { getAllUsers } from '../../../actions/users'
+import { deleteUser, getAllUsers } from '../../../actions/users'
 import { usersSelector } from '../../../selectors/users'
 
 const Table = ({users}) => {
     const history = useHistory();
-    const handleDelete = () => {
-
+    const dispath = useDispatch();
+    
+    const handleDelete = (userId) => {
+        dispath(deleteUser({userId}))
     }
+    
     const data = users?users.map((user)=>[
         _(
             <>

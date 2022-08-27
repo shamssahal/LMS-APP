@@ -2,15 +2,15 @@ import React,{useEffect} from 'react'
 import { Grid, _ } from "gridjs-react";
 import { useDispatch,useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { getAllBooks } from '../../../actions/books'
+import { deleteBook, getAllBooks } from '../../../actions/books'
 import { booksSelector } from '../../../selectors/books'
 import Navbar from '../../Navbar'
 
 const Table = ({books}) => {
     const history = useHistory();
-
-    const handleDelete = () => {
-
+    const dispath = useDispatch();
+    const handleDelete = (bookId) => {
+        dispath(deleteBook({bookId}))
     }
     const data = books?books.map((book)=>[
         _(

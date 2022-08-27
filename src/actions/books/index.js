@@ -11,6 +11,10 @@ export const SET_BOOK = `${BOOK}_SET`;
 
 export const BOOK_CREATE = `${BOOK}_CREATE`;
 export const BOOK_UPDATE = `${BOOK}_UPDATE`;
+export const BOOK_DELETE = `${BOOK}_DELETE`;
+
+export const BOOK_ALLOCATE = `${BOOK}_ALLOCATE`;
+export const BOOK_DEALLOCATE = `${BOOK}_DEALLOCATE`;
 
 
 //action creators
@@ -43,3 +47,19 @@ export const updateBook = (data) =>({
     type:BOOK_UPDATE,
     payload:data
 })
+
+export const deleteBook = (data) =>({
+    type:BOOK_DELETE,
+    payload:data
+})
+
+export const allocateBook = (data) =>({
+    type:BOOK_ALLOCATE,
+    payload:data
+})
+
+export const deallocateBook = (data) =>({
+    type:BOOK_DEALLOCATE,
+    payload:data
+})
+

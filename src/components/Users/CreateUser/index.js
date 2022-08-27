@@ -36,7 +36,7 @@ const CreateNewUser = (props) => {
             setName(user.userName)
             setEmail(user.email)
             setUploadUrl(user.id_loc)
-        }},[user])
+        }},[user.length])
 
 
 
@@ -64,7 +64,7 @@ const CreateNewUser = (props) => {
                 name,
                 email,
                 password,
-                idLocation:uploadUrl
+                idLocation:uploadUrl || src
             }))
         }
         

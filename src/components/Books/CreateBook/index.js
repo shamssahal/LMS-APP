@@ -13,15 +13,16 @@ const CreateNewBook = (props) => {
     const dispatch = useDispatch()
     const history = useHistory()
 
-    const [title,setTitle] = useState()
+    const [title,setTitle] = useState('')
     const [validateTitle,setValidateTitle] = useState(true)
 
-    const [author,setAuthor] = useState()
+    const [author,setAuthor] = useState('')
     const [validateAuthor,setValidateAuthor] = useState(true)
 
     const [cover,setCover] = useState('')
     const [uploadUrl,setUploadUrl] = useState('')
     const [showUpload,setShowUpload] = useState(false)
+
     
     useEffect(()=>{
         if(bookId){
@@ -36,7 +37,7 @@ const CreateNewBook = (props) => {
             setAuthor(book.author)
             setUploadUrl(book.cover_loc);
         }
-    } ,[book])
+    } ,[book.length])
  
     const onFileChange = (event) => {
         setShowUpload(true)
@@ -55,8 +56,9 @@ const CreateNewBook = (props) => {
             dispatch(createBook({
                 title,
                 author,
-                coverLoc:uploadUrl
+                coverLoc:uploadUrl || src
             }))
+
         }
 
         history.push('/books')

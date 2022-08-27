@@ -11,6 +11,7 @@ export const SET_USER = `${USER}_SET`;
 
 export const USER_CREATE = `${USER}_CREATE`;
 export const USER_UPDATE = `${USER}_UPDATE`;
+export const USER_DELETE = `${USER}_DELETE`;
 
 //action creators
 export const getAllUsers = () =>({
@@ -40,5 +41,10 @@ export const createUser = (data) =>({
 
 export const updateUser = (data) =>({
     type:USER_UPDATE,
+    payload:data
+})
+
+export const deleteUser = (data) =>({
+    type:USER_DELETE,
     payload:data
 })

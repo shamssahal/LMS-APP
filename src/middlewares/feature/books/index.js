@@ -2,7 +2,7 @@ import { apiRequest,API_SUCCESS,API_ERROR } from "../../../actions/api"
 import {ROOT_URL} from '../../../config/'
 
 import Alert from "sweetalert2";
-import { BOOK, BOOKS, BOOK_CREATE, BOOK_UPDATE, getAllBooks, GET_BOOK, GET_BOOKS, setAllBooks, setBook } from "../../../actions/books";
+import { BOOK, BOOKS, BOOK_ALLOCATE, BOOK_CREATE, BOOK_DEALLOCATE, BOOK_DELETE, BOOK_UPDATE, getAllBooks, getBook, GET_BOOK, GET_BOOKS, setAllBooks, setBook } from "../../../actions/books";
 
 export const booksMiddleware = ({dispatch}) => next => (action) =>{
     next(action)
@@ -44,6 +44,35 @@ export const booksMiddleware = ({dispatch}) => next => (action) =>{
                 feature:BOOK
             }))
             break;
+        case BOOK_DELETE:
+            dispatch(apiRequest({
+                body:action.payload,
+                config:{},
+                url:`${ROOT_URL}/book`,
+                method:'delete',
+                feature:BOOK
+            }))
+            break;
+
+        case BOOK_ALLOCATE:
+            dispatch(apiRequest({
+                body:action.payload,
+                config:{},
+                url:`${ROOT_URL}/allocate`,
+                method:'post',
+                feature:BOOK
+            }))
+            break;
+
+        case BOOK_DEALLOCATE:
+            dispatch(apiRequest({
+                body:action.payload,
+                config:{},
+                url:`${ROOT_URL}/deallocate`,
+                method:'put',
+                feature:BOOK
+            }))
+            break;
 
         case `${BOOKS} ${API_SUCCESS}`:
                 dispatch(setAllBooks(action.payload))
@@ -52,7 +81,10 @@ export const booksMiddleware = ({dispatch}) => next => (action) =>{
         case `${BOOK} ${API_SUCCESS}`:
                 if(action.message === 'Book Retrieved'){
                     dispatch(setBook(action.payload))
-                }else{
+                } else if(action.message === 'Book Allocated' || action.message === 'Book Deallocated'){
+                    dispatch(getBook({bookId:action.payload.bookId}))
+                }
+                else{
                     dispatch(getAllBooks())
                 }
                 break;   
