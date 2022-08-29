@@ -1,6 +1,6 @@
 export let ROOT_URL;
 if (process.env.REACT_APP_ENV === "production") {
-    ROOT_URL = "http://44.201.234.109";
+    ROOT_URL = "https://api.sahal.dev";
 } else {
     ROOT_URL = "http://localhost:3000";
 }
