@@ -7,6 +7,7 @@ import { createUser, getUser, getUserIdPresignedUrl, updateUser } from '../../..
 import { userIdPresignedUrlSelector } from '../../../selectors/preSignedUrls'
 import { userSelector } from '../../../selectors/users'
 import Navbar from '../../Navbar'
+import { AWS_S3_USER } from '../../../config';
 
 const CreateNewUser = (props) => {
     let src = 'https://cdn4.iconfinder.com/data/icons/small-n-flat/24/user-512.png'
@@ -57,7 +58,7 @@ const CreateNewUser = (props) => {
                'Content-Type':id.type
             }
         }).then((val)=>{
-           setUploadUrl(`https://d1caq8coktrxsi.cloudfront.net/${uploadConfigs.key}`)
+           setUploadUrl(`${AWS_S3_USER}/${uploadConfigs.key}`)
            Alert.fire({
             position: 'top-end',
             icon: 'success',
