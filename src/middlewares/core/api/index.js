@@ -28,11 +28,26 @@ export const apiMiddleware = ({dispatch}) => next => async(action) =>{
                         break;
                     }
                     if(action.meta.method==='post'){
-                        resp = await axios.post(action.meta.url,action.payload,{withCredentials:true,credentials:'include'})    
+                        resp = await axios.post(action.meta.url,action.payload,{
+                            withCredentials:true,
+                            credentials:'include',
+                            'Content-Type': 'application/json;charset=UTF-8',
+                            "Access-Control-Allow-Origin": "*",
+                        })    
                     }else if(action.meta.method==='put'){
-                        resp = await axios.put(action.meta.url,action.payload,{withCredentials:true,credentials:'include'})
+                        resp = await axios.put(action.meta.url,action.payload,{
+                            withCredentials:true,
+                            credentials:'include',
+                            'Content-Type': 'application/json;charset=UTF-8',
+                            "Access-Control-Allow-Origin": "*",
+                        })
                     }else if(action.meta.method==='delete'){
-                        resp = await axios.delete(action.meta.url,{withCredentials:true,credentials:'include',data:{...action.payload}})
+                        resp = await axios.delete(action.meta.url,{
+                            withCredentials:true,
+                            credentials:'include',
+                            'Content-Type': 'application/json;charset=UTF-8',
+                            "Access-Control-Allow-Origin": "*",
+                            data:{...action.payload}})
                     }
                     dispatch(apiSuccess(resp.data.responseData,action.meta.feature,resp.data.responseStatus.message))                        
 
